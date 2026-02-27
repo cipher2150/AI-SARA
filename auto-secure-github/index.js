@@ -122,8 +122,8 @@ app.post("/webhook", async (req, res) => {
     const { data: fileData } = await octokit.rest.repos.getContent({
       owner,
       repo,
-      path: "auto-secure-github/package.json",
-      ref: defaultBranch,
+      path: "auto-secure-github/package.json", // this is the from where it will read the package.json file
+      ref: branchName,
     });
 
     // decode content 
@@ -152,11 +152,11 @@ app.post("/webhook", async (req, res) => {
     await octokit.rest.repos.createOrUpdateFileContents({
       owner,
       repo,
-      path: "package.json",
+      path: "auto-secure-github/package.json", // this is the path wehre it will fix
       message: `fix: auto-upgrade ${packageName} to ${patchedVersion}`,
       content: updatedContent,
       branch: branchName,
-      sha:fileData.sha,
+      sha: fileData.sha,
     });
 
     // create pull request
