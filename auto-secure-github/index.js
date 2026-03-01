@@ -50,6 +50,10 @@ async function getInstallationOctokit(installationId) {
   return octokit;
 }
 
+app.get("/", (req, res) => {
+  res.send("AutoSecure GitHub App is running!");
+});
+
 app.post("/webhook", async (req, res) => {
 
   if (!verifySignature(req)) {
