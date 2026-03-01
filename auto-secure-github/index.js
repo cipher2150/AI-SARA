@@ -195,7 +195,7 @@ app.post("/webhook", async (req, res) => {
     await octokit.rest.pulls.create({
       owner,
       repo,
-      title: `Auto Security Fix: Upgrade ${packageName} to ${patchedVersion}`,
+      title: `🔒 Auto Security Fix: Upgrade ${packageName} to ${patchedVersion}`,
       head: branchName,
       base: defaultBranch,
       body: `
