@@ -32,7 +32,8 @@ function verifySignature(req) {
 }
 
 async function getInstallationOctokit(installationId) {
-  const privateKey = fs.readFileSync("./private-key.pem", "utf8");
+  //const privateKey = fs.readFileSync("./private-key.pem", "utf8");
+  const privateKey = process.env.GITHUB_PRIVATE_KEY;
 
   const auth = createAppAuth({
     appId: process.env.APP_ID,
