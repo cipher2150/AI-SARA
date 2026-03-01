@@ -5,7 +5,6 @@ import crypto from "crypto";
 import fs from "fs";
 import { createAppAuth } from "@octokit/auth-app";
 import { Octokit } from "@octokit/rest";
-import { generateSecurityExplanation } from "./services/aiExplainer.js";
 
 configDotenv();
 
@@ -81,15 +80,6 @@ app.post("/webhook", async (req, res) => {
         alert_number: alertNumber,
       });
 
-    // Generating AI explanation for the vulnerability
-    const explanation = await generateSecurityExplanation({
-      packageName: alert.dependency.package.name,
-      severity: alert.security_advisory.severity,
-      summary: alert.security_advisory.summary,
-      patchedVersion:
-        alert.security_advisory.vulnerabilities[0].patched_versions,
-    });
-    /*
     console.log("****** ALERT DETAILS ******");
     console.log("Package:", alert.dependency.package.name);
     console.log("Severity:", alert.security_advisory.severity);
@@ -97,9 +87,7 @@ app.post("/webhook", async (req, res) => {
     console.log(
       "Patched Version:",
       alert.security_vulnerability.first_patched_version.identifier
-    
     );
-    */
     // Fetch default branch information
     const { data: repoData } = await octokit.rest.repos.get({
       owner, 
@@ -120,9 +108,7 @@ app.post("/webhook", async (req, res) => {
     console.log("Base SHA:", baseeSha);
 
     // Create a new branch for the fix
-    //const branchName = `auto-fix-${alert.dependency.package.name}-${Date.now()}`;
-    const packageName = alert.dependency.package.name;
-    const branchName = `auto-fix-${packageName}-${Date.now()}`;
+    const branchName = `auto-fix-${alert.dependency.package.name}-${Date.now()}`;
     await octokit.rest.git.createRef({
       owner,
       repo,
@@ -136,8 +122,8 @@ app.post("/webhook", async (req, res) => {
     const { data: fileData } = await octokit.rest.repos.getContent({
       owner,
       repo,
-      path: "auto-secure-github/package.json", // this is the from where it will read the package.json file
-      ref: branchName,
+      path: "auto-secure-github/package.json",
+      ref: defaultBranch,
     });
 
     // decode content 
@@ -146,9 +132,9 @@ app.post("/webhook", async (req, res) => {
 
 
     // update dependency version
-    
+    const packageName = alert.dependency.package.name;
     const patchedVersion =
-      alert.security_advisory.vulnerabilities[0].patched_versions;
+      alert.security_vulnerability.first_patched_version.identifier;
 
     if (packageJson.dependencies && packageJson.dependencies[packageName]) {
       packageJson.dependencies[packageName] = `^${patchedVersion}`;
@@ -166,32 +152,14 @@ app.post("/webhook", async (req, res) => {
     await octokit.rest.repos.createOrUpdateFileContents({
       owner,
       repo,
-      path: "auto-secure-github/package.json", // this is the path wehre it will fix
+      path: "package.json",
       message: `fix: auto-upgrade ${packageName} to ${patchedVersion}`,
       content: updatedContent,
       branch: branchName,
-      sha: fileData.sha,
+      sha:fileData.sha,
     });
 
     // create pull request
-    const severity = alert.security_advisory.severity;
-    const prBody = `
-      AI Security Auto-Fix
-
-      Package: ${packageName}
-      Severity: ${severity}
-
-      ${explanation}
-      `;
-    await octokit.pulls.create({
-      owner,
-      repo,
-      title: `Security Fix: ${packageName}`,
-      head: branchName,
-      base: defaultBranch,
-      body: prBody,
-    });
-    /*  
     await octokit.rest.pulls.create({
       owner,
       repo,
@@ -210,7 +178,6 @@ app.post("/webhook", async (req, res) => {
     Upgraded to version ${patchedVersion} which contains the security patch.
     `,
     });
-  */
 
     console.log("Pull request created successfully.");
 
