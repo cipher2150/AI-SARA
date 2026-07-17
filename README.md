@@ -1,4 +1,4 @@
-# 🔒 AutoSecure GitHub App
+#  AutoSecure GitHub App
 
 > Automatically fixes vulnerable dependencies by listening to GitHub Dependabot alerts, updating the affected package to the first patched version, and creating a Pull Request for review.
 
@@ -24,14 +24,14 @@ This removes the manual effort of preparing security update PRs and speeds up vu
 
 # ✨ Features
 
-- 🔒 Secure GitHub Webhook verification
-- 🤖 GitHub App authentication
-- 📦 Automatic dependency upgrades
-- 🌿 Automatic branch creation
-- 💾 Automatic commit generation
-- 🔁 Automatic Pull Request creation
-- ⚡ Uses GitHub Installation Tokens (No Personal Access Token required)
-- 🛡️ Works directly with GitHub Dependabot Alerts
+-  Secure GitHub Webhook verification
+-  GitHub App authentication
+-  Automatic dependency upgrades
+-  Automatic branch creation
+-  Automatic commit generation
+-  Automatic Pull Request creation
+-  Uses GitHub Installation Tokens (No Personal Access Token required)
+-  Works directly with GitHub Dependabot Alerts
 
 ---
 
@@ -88,7 +88,7 @@ Dependabot detects vulnerability
 
 ---
 
-# 📁 Project Structure
+#  Project Structure
 
 ```
 auto-secure-github/
@@ -97,17 +97,17 @@ auto-secure-github/
 ├── package.json
 ├── .env
 ├── README.md
-└── private-key.pem (optional)
+└── private-key.pem
 ```
 
 ---
 
-# 🚀 Installation
+#  Installation
 
 Clone the repository
 
 ```bash
-git clone https://github.com/yourusername/auto-secure-github.git
+git clone https://github.com/cipher2150/AI-SARA/tree/main/auto-secure-github
 ```
 
 Go into the project
@@ -150,7 +150,7 @@ node index.js
 
 ---
 
-# 🔐 Required GitHub App Permissions
+#  Required GitHub App Permissions
 
 ### Repository Permissions
 
@@ -168,7 +168,7 @@ node index.js
 
 ---
 
-# 📌 Example
+#  Example
 
 ### Dependabot Alert
 
@@ -217,12 +217,12 @@ fix: auto-upgrade express to 4.21.2
 Creates Pull Request
 
 ```
-🔒 Auto Security Fix: Upgrade express to 4.21.2
+ Auto Security Fix: Upgrade express to 4.21.2
 ```
 
 ---
 
-# 📷 How It Works
+#  How It Works
 
 1. GitHub Dependabot detects a vulnerable package.
 2. GitHub sends a `dependabot_alert` webhook.
@@ -236,7 +236,7 @@ Creates Pull Request
 
 ---
 
-# 🔮 Future Improvements
+#  Future Improvements
 
 - AI-generated PR summaries
 - Automatic lock file updates
@@ -254,4 +254,3 @@ Creates Pull Request
 
 **Rajshekhar Prasad Saxena**
 
-If you found this project useful, consider giving it a ⭐ on GitHub!
